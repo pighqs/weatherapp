@@ -6,7 +6,7 @@ var app = express();
 app.use(express.static('public'));
 
 app.set('view engine', 'ejs');
-// module request permet d'interroger webservice
+// Request is designed to be the simplest way possible to make http calls.It supports HTTPS and follows redirects by default.
 var request = require('request');
 
 var cityList = [];
@@ -48,20 +48,25 @@ app.get('/add', function(req, res) {
         var meteoUrl = "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + apiKey + "&lang=fr&units=metric&type=accurate&mode=json";
 
         request(meteoUrl, function(error, response, body) {
+            // seulement si la réponse n'est pas 404 ()
+            if (response.statusCode !== 404) {
 
-            // la requête nous renvoie les infos qui seront stockées au format JSON dans une variable "body":
-            var body = JSON.parse(body);
-            // on récupère les infos de body pour assigner une nouvelle variable newCity
-            var newCity = {
-                name: body.name,
-                icone: "http://openweathermap.org/img/w/" + body.weather[0].icon + ".png",
-                description: body.weather[0].description,
-                tempMax: body.main.temp_max + " °C",
-                tempMin: body.main.temp_min + " °C"
-            };
+                // la requête nous renvoie les infos qui seront stockées au format JSON dans une variable "body":
+                var body = JSON.parse(body);
+                // on récupère les infos de body pour assigner une nouvelle variable newCity
+                var newCity = {
+                    name: body.name,
+                    icone: "http://openweathermap.org/img/w/" + body.weather[0].icon + ".png",
+                    description: body.weather[0].description,
+                    tempMax: body.main.temp_max + " °C",
+                    tempMin: body.main.temp_min + " °C"
+                };
 
-            // on pushe cette variable dans le tableau cityList qui est lu par le front
-            cityList.push(newCity);
+                // on insere cette variable dans le tableau cityList qui est lu par le front
+                cityList.push(newCity);
+            } else {
+                console.log('statusCode:', response && response.statusCode);
+            }
 
             // on affiche la home
             res.render('home', { cityList: cityList });
