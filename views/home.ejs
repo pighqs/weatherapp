@@ -1,10 +1,70 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>weathert</title>
+  <meta charset="utf-8">
+
+  <title>Weather App</title>
+  <script
+  src="https://code.jquery.com/jquery-3.2.1.min.js"
+  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+  crossorigin="anonymous"></script>
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h4>Weather Cast</h4>
+
+  <div class="container sectionCity">
+    <div class="row">
+      <div class="col-xs-12 col-sm-offset-2 col-sm-8">
+        <form class="form-inline" action="add">
+          <div class="form-group">
+            <label for="city">Ville</label>
+            <input name="city" type="text" class="form-control" id="city" placeholder="Lyon, Paris ...">
+          </div>
+          <button type="submit" id="btn-valide" class="btn btn-warning">Enregistrer</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+
+  <div id="content">
+  </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12 col-sm-offset-2 col-sm-8">
+        <ul class="list-group">
+          <% for(var i=0; i<cityList.length; i++) { %>
+          <li class="list-group-item">
+            <span class="city"><%=cityList[i].name%></span>
+            <img class="logo-meteo" src=<%=cityList[i].icone%>>
+            <span class="desc"><%=cityList[i].description%></span>
+            <span class="label label-warning"><%=cityList[i].tempMax%></span>
+            <span class="label label-default"><%=cityList[i].tempMin%></span> <a href="/delete?position=<%=i%>">
+            <span class="glyphicon glyphicon-remove-circle "></span></a></li>
+     <% } %>
+      </ul>
+
+      </div>
+    </div>
+  </div>
+
+<script>
+var buttonSubmit = document.getElementById("btn-valide");
+buttonSubmit.onclick = function(e) {
+var inputVille = document.getElementById("city");
+  if (inputVille.value === "") {
+    var messAlert = document.createElement("p");
+    messAlert.textContent = "vous n'avez pas renseigné la ville!";
+    document.querySelector(".sectionCity").appendChild(messAlert);
+  }
+}
+
+</script>
+
 </body>
 </html>
