@@ -6,12 +6,12 @@ var app = express();
 app.use(express.static('public'));
 
 app.set('view engine', 'ejs');
-// Request is designed to be the simplest way possible to make http calls.It supports HTTPS and follows redirects by default.
+// Request is designed to make http calls. It supports HTTPS and follows redirects by default.
 var request = require('request');
 
 var cityList = [];
 
-var villesHome = ["Paris", "San Francisco", "Tokyo"];
+var villesHome = ["Paris", "San Francisco", "Tokyo", "Kinshasa"];
 
 for (var i = 0; i < villesHome.length; i++) {
     //la ville demandée en url via le formulaire à openweathermap est stockée dans une variable
@@ -19,7 +19,7 @@ for (var i = 0; i < villesHome.length; i++) {
     request(villeHomeUrl, function(error, response, body) {
         // la requête nous renvoie les infos qui seront stockées au format JSON dans une variable "body":
         var body = JSON.parse(body);
-        // on récupère les infos de body pour assigner une nouvelle variable newCity
+        // on récupère les infos de body(retournées âr le webservice) pour assigner une nouvelle variable newCity
         var ville = {
             name: body.name,
             icone: "http://openweathermap.org/img/w/" + body.weather[0].icon + ".png",
