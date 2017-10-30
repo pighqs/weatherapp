@@ -1,20 +1,29 @@
 body {
-  font-family: "Open Sans", sans-serif;
+    font-family: "Open Sans", sans-serif;
 }
 
 .city {
- display: inline-block;
- width:25%; 
+    display: inline-block;
+    width: 25%;
 }
 
 .glyphicon-remove-circle {
-  font-size:20px;
-  float:right;
-  top:15px;
-  color: #ED9F31;
+    font-size: 20px;
+    float: right;
+    top: 15px;
+    color: #ED9F31;
 }
 
 .sectionCity {
- padding-top: 25px; 
- padding-bottom: 25px; 
+    padding-top: 25px;
+    padding-bottom: 25px;
+}
+
+.messAlert {
+    color: red;
+    margin-top: 2rem;
+}
+
+.info-meteo {
+    margin-right: 1rem;
 }

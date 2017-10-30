@@ -32,10 +32,10 @@ var cityList = [
 // };
 
 
-
 // ROUTES
 app.get('/', function(req, res) {
     res.render('home', { cityList: cityList });
+
 });
 
 app.get('/add', function(req, res) {
@@ -60,6 +60,7 @@ app.get('/add', function(req, res) {
 
             // on pushe cette variable dans le tableau cityList qui est lu par le front
             cityList.push(newCity);
+            req.query = "";
             // on affiche la home
             res.render('home', { cityList: cityList });
 
@@ -71,11 +72,10 @@ app.get('/add', function(req, res) {
 app.get('/delete', function(req, res) {
     if (req.query.position && req.query.position != "") {
         cityList.splice(req.query.position, 1);
+
     }
     res.render('home', { cityList: cityList });
 });
-
-
 
 
 
