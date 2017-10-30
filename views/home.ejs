@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-<script
+  <script
   src="https://code.jquery.com/jquery-3.2.1.min.js"
   integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
   crossorigin="anonymous"></script>
@@ -46,47 +46,47 @@
             <span class="info-meteo desc"><%=cityList[i].description%></span>
             <span class="info-meteo label label-warning"><%=cityList[i].tempMax%></span>
             <span class="info-meteo label label-default"><%=cityList[i].tempMin%></span> <a href="/delete?position=<%=i%>">
-            <span class="glyphicon glyphicon-remove-circle "></span></a></li>
-     <% } %>
-      </ul>
+              <span class="glyphicon glyphicon-remove-circle "></span></a></li>
+              <% } %>
+            </ul>
 
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
 
 
 
-  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+      <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
 
-  <script>
-  $( function() {
-    $( "#sortable" ).sortable();
-    $( "#sortable" ).disableSelection();
-  } );
-  </script>
+      <script>
+        $(document).ready(function() {
+          $( function() {
+            $( "#sortable" ).sortable();
+            $( "#sortable" ).disableSelection();
+          } );
+        });
 
-<script>
-var btnSubmit = document.getElementById("btn-valide");
-var alerteExist = false;
-btnSubmit.onclick = function(e) {
-  if(alerteExist) {
-    var alerte = document.querySelector(".messAlert");
-    console.log("messAlert existe :" + document.querySelector(".messAlert"));
-    document.querySelector(".sectionCity").removeChild(alerte);
-  }
-var inputVille = document.getElementById("city");
-  if (inputVille.value === "") {
-    var messAlert = document.createElement("p");
-    messAlert.textContent = "vous n'avez pas renseigné la ville!";
-    messAlert.classList.add("messAlert", "text-center");
-    document.querySelector(".sectionCity").appendChild(messAlert);
-    alerteExist = true;
-   event.preventDefault();
-  }
-}
+        var btnSubmit = document.getElementById("btn-valide");
+        var alerteExist = false;
+        btnSubmit.onclick = function(e) {
+          if(alerteExist) {
+            var alerte = document.querySelector(".messAlert");
+            console.log("messAlert existe :" + document.querySelector(".messAlert"));
+            document.querySelector(".sectionCity").removeChild(alerte);
+          }
+          var inputVille = document.getElementById("city");
+          if (inputVille.value === "") {
+            var messAlert = document.createElement("p");
+            messAlert.textContent = "vous n'avez pas renseigné la ville!";
+            messAlert.classList.add("messAlert", "text-center");
+            document.querySelector(".sectionCity").appendChild(messAlert);
+            alerteExist = true;
+            event.preventDefault();
+          }
+        }
 
-</script>
+      </script>
 
-</body>
-</html>
+    </body>
+    </html>
