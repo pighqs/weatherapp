@@ -11,7 +11,7 @@ var request = require('request');
 
 var cityList = [];
 
-var villesHome = ["Paris", "San Francisco", "Tokyo", "Kinshasa"];
+var villesHome = ["San Francisco", "Tokyo", "Kinshasa"];
 
 for (var i = 0; i < villesHome.length; i++) {
     //la ville demandée en url via le formulaire à openweathermap est stockée dans une variable
@@ -84,6 +84,18 @@ app.get('/delete', function(req, res) {
 });
 
 
+
+app.get('/move', function(req, res) {
+    console.log("ordre modifié");
+    console.log(req.query.sort);
+    var newOrder = [];
+    // returns [ '1', '2', '0' ]
+    for (var i = 0; i < req.query.sort.length; i++) {
+        newOrder.push(cityList[req.query.sort[i]]);
+    }
+    cityList = newOrder;
+    newOrder = [];
+});
 
 
 //LISTEN

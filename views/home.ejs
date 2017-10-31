@@ -40,7 +40,7 @@
       <div class="col-xs-12 col-sm-offset-2 col-sm-8">
         <ul class="list-group" id="sortable">
           <% for(var i=0; i<cityList.length; i++) { %>
-          <li class="list-group-item ui-state-default ui-icon ui-icon-arrowthick-2-n-s">
+          <li id="item_<%=i%>" class="list-group-item ui-state-default ui-icon ui-icon-arrowthick-2-n-s">
             <span class="info-meteo city"><%=cityList[i].name%></span>
             <img class="info-meteo logo-meteo" src=<%=cityList[i].icone%>>
             <span class="info-meteo desc"><%=cityList[i].description%></span>
@@ -61,10 +61,19 @@
 
       <script>
         $(document).ready(function() {
-          $( function() {
-            $( "#sortable" ).sortable();
-            $( "#sortable" ).disableSelection();
-          } );
+
+            $( "#sortable" ).sortable({
+
+            update: function( event, ui ) {
+              //
+              var sorted = $( "#sortable" ).sortable( "serialize", { key: "sort" } );
+
+              $.getJSON("http://localhost:8080/move?"+sorted, function(data) {
+              });
+              }
+            });
+
+
         });
 
         var btnSubmit = document.getElementById("btn-valide");
