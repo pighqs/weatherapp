@@ -61,15 +61,21 @@
 
       <script>
         $(document).ready(function() {
-
             $( "#sortable" ).sortable({
 
             update: function( event, ui ) {
-              //
+
+              //methode serialize
               var sorted = $( "#sortable" ).sortable( "serialize", { key: "sort" } );
 
               $.getJSON("http://localhost:8080/move?"+sorted, function(data) {
               });
+
+              // change id de chaque li selon position apres update
+              $("li").each(function(index) {
+                $(this).attr('id', "item_"+index);
+                });
+
               }
             });
 
