@@ -87,14 +87,17 @@ app.get('/delete', function(req, res) {
 
 app.get('/move', function(req, res) {
     console.log("ordre modifié");
-    console.log(req.query.sort);
+    console.log(req.query);
+    // on crée nouveau tableau vide
+    // req.query.sort est un tableau avec chaque id envoyé selon son ordre dans le navigateur
     var newOrder = [];
-    // returns [ '1', '2', '0' ]
     for (var i = 0; i < req.query.sort.length; i++) {
+        // à chaque tour de boucle; l'item ayant pour index dans citylink l'id correspondant dans req.query.sort est inséré dans nveau tableau
         newOrder.push(cityList[req.query.sort[i]]);
     }
+    // ce nouveau tableau a bien l'ordre renvoyé par la requete, on ecrase les valeurs de cityLink avec ce tableau
     cityList = newOrder;
-    newOrder = [];
+    res.send("ok babe");
 });
 
 

@@ -68,7 +68,7 @@
               //methode serialize
               var sorted = $( "#sortable" ).sortable( "serialize", { key: "sort" } );
 
-              $.getJSON("http://localhost:8080/move?"+sorted, function(data) {
+              $.getJSON("/move?"+sorted, function(data) {
               });
 
               // change id de chaque li selon position apres update
