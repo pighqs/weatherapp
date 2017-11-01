@@ -11,36 +11,56 @@ var request = require('request');
 
 var cityList = [];
 
-var villesHome = ["San Francisco", "Tokyo", "Kinshasa"];
+// BASE DE DONNEES
 
-for (var i = 0; i < villesHome.length; i++) {
-    //la ville demandée en url via le formulaire à openweathermap est stockée dans une variable
-    var villeHomeUrl = "http://api.openweathermap.org/data/2.5/weather?q=" + villesHome[i] + "&appid=06aea259ff3cfc440c58bc8e256393c6&lang=fr&units=metric&type=accurate&mode=json";
-    request(villeHomeUrl, function(error, response, body) {
-        // la requête nous renvoie les infos qui seront stockées au format JSON dans une variable "body":
-        var body = JSON.parse(body);
-        // on récupère les infos de body(retournées âr le webservice) pour assigner une nouvelle variable newCity
-        var ville = {
-            name: body.name,
-            icone: "http://openweathermap.org/img/w/" + body.weather[0].icon + ".png",
-            description: body.weather[0].description,
-            tempMax: body.main.temp_max + " °C",
-            tempMin: body.main.temp_min + " °C"
-        };
-        // on pushe cette variable dans le tableau cityList qui est lu par le front
-        cityList.push(ville);
-    });
-}
+var mongoose = require('mongoose');
+
+var options = { server: { socketOptions: { connectTimeoutMS: 30000 } } };
+
+
+
+mongoose.connect('mongodb://toto:tata@ds141351.mlab.com:41351/weatherapp', options, function(err) {
+    if (err) {
+        console.log("erreur : " + err);
+    } else {
+        console.log("connection data base OK");
+    }
+});
+
+var citySchema = mongoose.Schema({
+    name: String,
+    icone: String,
+    description: String,
+    tempMax: String,
+    tempMin: String,
+});
+
+
+var CityModel = mongoose.model('cities', citySchema);
+
+CityModel.find(function(err, cities) {
+    var cityDB;
+    for (var i = 0; i < cities.length; i++) {
+        cityDB = cities[i];
+        cityList.push(cityDB);
+    }
+
+})
+
+
+////// RECUPERER UNE COLLECTION DANS BASE DE DONNEES
 
 
 // ROUTES
 app.get('/', function(req, res) {
+
     res.render('home', { cityList: cityList });
 
 });
 
 app.get('/add', function(req, res) {
     if (req.query.city && req.query.city != "") {
+
 
         var apiKey = "06aea259ff3cfc440c58bc8e256393c6";
         var city = req.query.city;
@@ -59,11 +79,20 @@ app.get('/add', function(req, res) {
                     icone: "http://openweathermap.org/img/w/" + body.weather[0].icon + ".png",
                     description: body.weather[0].description,
                     tempMax: body.main.temp_max + " °C",
-                    tempMin: body.main.temp_min + " °C"
+                    tempMin: body.main.temp_min + " °C",
                 };
+
+                var newCityDB = new CityModel(newCity);
+                newCity.id = newCityDB._id;
 
                 // on insere cette variable dans le tableau cityList qui est lu par le front
                 cityList.push(newCity);
+                // on insere dans la base de donnees
+
+
+
+                newCityDB.save(function(error, entree) {});
+
             } else {
                 console.log('statusCode:', response && response.statusCode);
             }
@@ -78,11 +107,12 @@ app.get('/add', function(req, res) {
 app.get('/delete', function(req, res) {
     if (req.query.position && req.query.position != "") {
         cityList.splice(req.query.position, 1);
-
+        var cityToDel = req.query.uniqueID;
+        console.log(req.query.uniqueID);
+        CityModel.remove({ _id: cityToDel }, function(error, ville) {});
     }
     res.render('home', { cityList: cityList });
 });
-
 
 
 app.get('/move', function(req, res) {

@@ -45,7 +45,7 @@
             <img class="info-meteo logo-meteo" src=<%=cityList[i].icone%>>
             <span class="info-meteo desc"><%=cityList[i].description%></span>
             <span class="info-meteo label label-warning"><%=cityList[i].tempMax%></span>
-            <span class="info-meteo label label-default"><%=cityList[i].tempMin%></span> <a href="/delete?position=<%=i%>">
+            <span class="info-meteo label label-default"><%=cityList[i].tempMin%></span> <a href="/delete?position=<%=i%>&uniqueID=<%=cityList[i].id%>">
               <span class="glyphicon glyphicon-remove-circle "></span></a></li>
               <% } %>
             </ul>
@@ -71,9 +71,10 @@
               $.getJSON("/move?"+sorted, function(data) {
               });
 
-              // change id de chaque li selon position apres update
-              $("li").each(function(index) {
+              // change id de chaque li et href de chaque boutton de suppression selon position apres update
+              $(".list-group-item").each(function(index) {
                 $(this).attr('id', "item_"+index);
+                $(this).find("a").attr('href', "/delete?position="+index);
                 });
 
               }
