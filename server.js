@@ -37,7 +37,7 @@ var CityModel = mongoose.model('cities', citySchema);
 
 var cityList = [];
 
-
+////// RECUPERER UNE COLLECTION DANS BASE DE DONNEES (pour la mettre dans cityList)
 CityModel.find(function(err, cities) {
     var cityDB;
     for (var i = 0; i < cities.length; i++) {
@@ -47,7 +47,6 @@ CityModel.find(function(err, cities) {
 
 })
 
-////// RECUPERER UNE COLLECTION DANS BASE DE DONNEES
 
 // ROUTES
 app.get('/', function(req, res) {
@@ -107,6 +106,7 @@ app.get('/add', function(req, res) {
 
 app.get('/delete', function(req, res) {
     if (req.query.uniqueID && req.query.uniqueID != "") {
+        // recupere ID unique envoyé en requête et supprime entrée correspondante dans la base de données
         CityModel.remove({ _id: req.query.uniqueID }, function(error, ville) {
             //console.log(error);
             CityModel.find(function(error, cities) {
@@ -120,18 +120,22 @@ app.get('/delete', function(req, res) {
 
 
 app.get('/move', function(req, res) {
+    //récupère nouvel ordre envoyé en requete sous forme de tableau
     var newOrder = req.query.sort; // newOrder = [ '2', '0', '1' ]
 
+    // retourne collection de villes triées par ordre de position dans base de données
     var query = CityModel.find();
     query.sort({ position: 1 });
+
     query.exec(function(error, cities) {
-        for (var i = 0; i < cities.length; i++) {
+        // chaque entrée de newOrder est lue dans l'ordre
+        for (var i = 0; i < newOrder.length; i++) {
+            // la ville dont la position correspond à "i" dans newOrder prend la posistion du "i" de la boucle
             cities[newOrder[i]].set({ position: i });
             cities[newOrder[i]].save(function(error, updatedCity) {});
         }
     });
 });
-
 
 
 
