@@ -30,6 +30,8 @@ var citySchema = mongoose.Schema({
     description: String,
     tempMax: String,
     tempMin: String,
+    lng: String,
+    lat: String
 });
 
 
@@ -77,6 +79,9 @@ app.get('/add', function(req, res) {
                     description: body.weather[0].description,
                     tempMax: body.main.temp_max + " °C",
                     tempMin: body.main.temp_min + " °C",
+                    lng: body.coord.lon,
+                    lat: body.coord.lat
+
                 });
 
                 // on insere dans la base de donnees
@@ -123,7 +128,11 @@ app.get('/move', function(req, res) {
     //récupère nouvel ordre envoyé en requete sous forme de tableau
     var newOrder = req.query.sort; // newOrder = [ '2', '0', '1' ]
 
-    // retourne collection de villes triées par ordre de position dans base de données
+    // for (var i = 0; i < newOrder.length; i++) {
+    //         CityModel.update({ position: newOrder[i] }, { age: i });
+    //     }
+
+    //retourne collection de villes triées par ordre de position dans base de données
     var query = CityModel.find();
     query.sort({ position: 1 });
 
@@ -137,7 +146,11 @@ app.get('/move', function(req, res) {
     });
 });
 
+// app.get('/search', function(req, res) {
+//     var searchQuery = JSON.stringify(req.query);
+//     console.log(searchQuery);
 
+// });
 
 
 //LISTEN

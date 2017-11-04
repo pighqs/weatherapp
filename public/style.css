@@ -27,3 +27,10 @@ body {
 .info-meteo {
     margin-right: 1rem;
 }
+
+
+#map {
+    height: 400px;
+    width: 100%;
+    margin-bottom: 1rem;
+}
