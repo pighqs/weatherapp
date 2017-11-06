@@ -34,3 +34,11 @@ body {
     width: 100%;
     margin-bottom: 1rem;
 }
+
+#city {
+    width: 300px;
+}
+
+.form-inline {
+    text-align: center;
+}
