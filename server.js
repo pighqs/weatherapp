@@ -58,12 +58,13 @@ app.get('/', function(req, res) {
 });
 
 app.get('/add', function(req, res) {
+    console.log(req.query.city);
     if (req.query.city && req.query.city != "") {
 
         var apiKey = "06aea259ff3cfc440c58bc8e256393c6";
         var city = req.query.city;
         //la ville demandée en url via le formulaire à openweathermap est stockée dans une variable
-        var meteoUrl = "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + apiKey + "&lang=fr&units=metric&type=accurate&mode=json";
+        var meteoUrl = "http://api.openweathermap.org/data/2.5/weather?q=" + req.query.city + "&lang=fr&units=metric&mode=json&appid=" + apiKey;
         request(meteoUrl, function(error, response, body) {
             // seulement si la réponse n'est pas 404 ()
             if (response.statusCode !== 404) {
@@ -86,24 +87,24 @@ app.get('/add', function(req, res) {
 
                 // on insere dans la base de donnees
                 newCity.save(function(error, city) {
-                    //console.log(error);
+                    console.log(error);
 
                     CityModel.find(function(error, cities) {
                         for (var i = 0; i < cities.length; i++) {
                             cities[i].set({ position: i });
-                            //console.log(cities[i]);
                             cities[i].save(function(error, cityUpdate) {
                                 //console.log(error);
                             });
                         }
-                        res.render('home', { cityList: cities });
                     });
                 });
 
 
             } else {
-                console.log('statusCode:', response && response.statusCode);
+                console.log(meteoUrl);
+                console.log('request failed, statusCode:', response && response.statusCode);
             }
+            
 
         });
     }
@@ -146,11 +147,7 @@ app.get('/move', function(req, res) {
     });
 });
 
-// app.get('/search', function(req, res) {
-//     var searchQuery = JSON.stringify(req.query);
-//     console.log(searchQuery);
 
-// });
 
 
 //LISTEN
