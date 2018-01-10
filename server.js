@@ -1,6 +1,5 @@
 //PACKAGES
 var express = require('express');
-// on stocke l'app express dans une variable app : initialisation
 var app = express();
 // permet de charger des fichiers statiques (css, images, fichiers js externes), ils doivent etre placés dans le dossier "public"
 app.use(express.static('public'));
@@ -38,16 +37,6 @@ var citySchema = mongoose.Schema({
 var CityModel = mongoose.model('cities', citySchema);
 
 var cityList = [];
-
-////// RECUPERER UNE COLLECTION DANS BASE DE DONNEES (pour la mettre dans cityList)
-CityModel.find(function(err, cities) {
-    var cityDB;
-    for (var i = 0; i < cities.length; i++) {
-        cityDB = cities[i];
-        cityList.push(cityDB);
-    }
-
-})
 
 
 // ROUTES
@@ -87,15 +76,17 @@ app.get('/add', function(req, res) {
 
                 // on insere dans la base de donnees
                 newCity.save(function(error, city) {
-                    console.log(error);
+                    if (error) {
+                        console.log(error);
+                    }
 
                     CityModel.find(function(error, cities) {
                         for (var i = 0; i < cities.length; i++) {
                             cities[i].set({ position: i });
                             cities[i].save(function(error, cityUpdate) {
-                                //console.log(error);
                             });
                         }
+                        res.render('home', { cityList: cities });
                     });
                 });
 
