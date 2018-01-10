@@ -81,11 +81,6 @@ app.get('/add', function(req, res) {
                     }
 
                     CityModel.find(function(error, cities) {
-                        for (var i = 0; i < cities.length; i++) {
-                            cities[i].set({ position: i });
-                            cities[i].save(function(error, cityUpdate) {
-                            });
-                        }
                         res.render('home', { cityList: cities });
                     });
                 });
@@ -102,7 +97,6 @@ app.get('/add', function(req, res) {
 });
 
 app.get('/delete', function(req, res) {
-    if (req.query.uniqueID && req.query.uniqueID != "") {
         // recupere ID unique envoyé en requête et supprime entrée correspondante dans la base de données
         CityModel.remove({ _id: req.query.uniqueID }, function(error, ville) {
             //console.log(error);
@@ -111,8 +105,6 @@ app.get('/delete', function(req, res) {
                 res.render('home', { cityList: cities });
             });
         });
-
-    }
 });
 
 
@@ -120,9 +112,6 @@ app.get('/move', function(req, res) {
     //récupère nouvel ordre envoyé en requete sous forme de tableau
     var newOrder = req.query.sort; // newOrder = [ '2', '0', '1' ]
 
-    // for (var i = 0; i < newOrder.length; i++) {
-    //         CityModel.update({ position: newOrder[i] }, { age: i });
-    //     }
 
     //retourne collection de villes triées par ordre de position dans base de données
     var query = CityModel.find();
