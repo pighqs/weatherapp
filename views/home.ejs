@@ -1,30 +1,38 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="utf-8">
-  <script
-  src="https://code.jquery.com/jquery-3.2.1.min.js"
-  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
-  crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+    crossorigin="anonymous"></script>
 
 
 
   <!--  <script type="text/javascript" src="main.js"></script> -->
 
 
-  <title>Weather App</title>
+  <title>WeatherMap</title>
 
   <!-- Latest compiled and minified CSS -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+    crossorigin="anonymous">
 
   <!-- Latest compiled and minified JavaScript -->
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+    crossorigin="anonymous"></script>
 
   <link rel="stylesheet" href="style.css">
 
 
 </head>
+
 <body>
+  <div class="container title-infos">
+    <h1>WeatherMap</h1>
+    <h4>Add a city to see the weather, drag and drop your cities to order them, click on a city name to center the map on it</h4>
+    <p>this app is using Jquery draggable, Google Maps Api (map, markers & autocompletion) and OpenweatherMap.</p>
+
+  </div>
 
   <div class="container sectionCity">
     <div class="row">
@@ -40,121 +48,133 @@
     </div>
   </div>
 
-  
+
   <div class="container">
     <div class="row">
       <div class="col-xs-12 col-sm-6">
-        <div id="map" ></div>
+        <div id="map"></div>
       </div>
       <div class="col-xs-12 col-sm-6">
         <ul class="list-group" id="sortable">
           <% for(var i=0; i<cityList.length; i++) { %>
-          <li id="item_<%=i%>" data-lat="<%=cityList[i].lat%>" data-lng="<%=cityList[i].lng%>" class="list-group-item ui-state-default ui-icon ui-icon-arrowthick-2-n-s">
-            <span class="info-meteo city"><%=cityList[i].name%></span>
-            <img class="info-meteo logo-meteo" src=<%=cityList[i].icone%>>
-            <span class="info-meteo desc"><%=cityList[i].description%></span>
-            <span class="info-meteo label label-warning"><%=cityList[i].tempMax%></span>
-            <span class="info-meteo label label-default"><%=cityList[i].tempMin%></span> <a href="/delete?&uniqueID=<%=cityList[i].id%>">
-              <span class="glyphicon glyphicon-remove-circle "></span></a></li>
+            <li id="item_<%=i%>" data-lat="<%=cityList[i].lat%>" data-lng="<%=cityList[i].lng%>" class="list-group-item ui-state-default ui-icon ui-icon-arrowthick-2-n-s">
+              <span class="info-meteo city">
+                <%=cityList[i].name%>
+              </span>
+              <img class="info-meteo logo-meteo" src=<%=cityList[i].icone%>>
+              <span class="info-meteo desc">
+                <%=cityList[i].description%>
+              </span>
+              <span class="info-meteo label label-warning">
+                <%=cityList[i].tempMax%>
+              </span>
+              <span class="info-meteo label label-default">
+                <%=cityList[i].tempMin%>
+              </span>
+              <a href="/delete?&uniqueID=<%=cityList[i].id%>">
+                <span class="glyphicon glyphicon-remove-circle "></span>
+              </a>
+            </li>
 
-              <%  } %>
-            </ul>
+            <%  } %>
+        </ul>
 
-          </div>
-        </div>
       </div>
+    </div>
+  </div>
 
 
-      <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
 
-      <script>
-        $(document).ready(function() {
-          $( "#sortable" ).sortable({
+  <script>
+    $(document).ready(function () {
+      $("#sortable").sortable({
 
-            update: function( event, ui ) {
+        update: function (event, ui) {
 
-              //methode serialize
-              var sorted = $( "#sortable" ).sortable( "serialize", { key: "sort" } );
+          //methode serialize
+          var sorted = $("#sortable").sortable("serialize", { key: "sort" });
 
-              $.getJSON("/move?"+sorted, function(data) {
-              });
-
-              //change id de chaque li et href de chaque boutton de suppression selon position apres update
-              $(".list-group-item").each(function(index) {
-                $(this).attr('id', "item_"+index);
-                $(this).find("a").attr('href', "/delete?position="+index);
-              });
-
-            }
+          $.getJSON("/move?" + sorted, function (data) {
           });
 
+          //change id de chaque li et href de chaque boutton de suppression selon position apres update
+          $(".list-group-item").each(function (index) {
+            $(this).attr('id', "item_" + index);
+            $(this).find("a").attr('href', "/delete?position=" + index);
+          });
 
-        });
-
-        var btnSubmit = document.getElementById("btn-valide");
-        var alerteExist = false;
-        btnSubmit.onclick = function(e) {
-          if(alerteExist) {
-            var alerte = document.querySelector(".messAlert");
-            console.log("messAlert existe :" + document.querySelector(".messAlert"));
-            document.querySelector(".sectionCity").removeChild(alerte);
-          }
-          var inputVille = document.getElementById("city");
-          inputVille.value = autocomplete.getPlace().vicinity;
-          if (inputVille.value === "") {
-            var messAlert = document.createElement("p");
-            messAlert.textContent = "vous n'avez pas renseigné la ville!";
-            messAlert.classList.add("messAlert", "text-center");
-            document.querySelector(".sectionCity").appendChild(messAlert);
-            alerteExist = true;
-            event.preventDefault();
-          }
         }
+      });
 
-        var autocomplete;
-        var newCity;
-        var marker;
-        var centerMap;
 
-        function googleMapsAPIS() {
+    });
 
-         autocomplete = new google.maps.places.Autocomplete(document.getElementById('city'), { types: ['(cities)']});
-         autocomplete.addListener('place_changed', function() {
-         console.log(autocomplete.getPlace());
-  });
-         
-         centerMap = {lat: 48.866667, lng: 2.333333};
-         var map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 5,
-          center: centerMap
+    var btnSubmit = document.getElementById("btn-valide");
+    var alerteExist = false;
+    btnSubmit.onclick = function (e) {
+      if (alerteExist) {
+        var alerte = document.querySelector(".messAlert");
+        console.log("messAlert existe :" + document.querySelector(".messAlert"));
+        document.querySelector(".sectionCity").removeChild(alerte);
+      }
+      var inputVille = document.getElementById("city");
+      inputVille.value = autocomplete.getPlace().vicinity;
+      if (inputVille.value === "") {
+        var messAlert = document.createElement("p");
+        messAlert.textContent = "vous n'avez pas renseigné la ville!";
+        messAlert.classList.add("messAlert", "text-center");
+        document.querySelector(".sectionCity").appendChild(messAlert);
+        alerteExist = true;
+        event.preventDefault();
+      }
+    }
+
+    var autocomplete;
+    var newCity;
+    var marker;
+    var centerMap;
+
+    function googleMapsAPIS() {
+
+      autocomplete = new google.maps.places.Autocomplete(document.getElementById('city'), { types: ['(cities)'] });
+      autocomplete.addListener('place_changed', function () {
+        console.log(autocomplete.getPlace());
+      });
+
+      centerMap = { lat: 48.866667, lng: 2.333333 };
+      var map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 5,
+        center: centerMap
+      });
+
+      $("li").on("click", function () {
+        map.setCenter({ lat: $(this).data("lat"), lng: $(this).data("lng") });
+      });
+
+      $("li").each(function (index) {
+        newCity = { lat: $(this).data("lat"), lng: $(this).data("lng") };
+        marker = new google.maps.Marker({
+          position: newCity,
+          map: map
         });
 
-         $("li").on("click", function() {
-          map.setCenter({lat: $(this).data("lat"), lng: $(this).data("lng")});
-        });
+      });
 
-         $("li").each(function(index) {
-          newCity = {lat: $(this).data("lat"), lng: $(this).data("lng")};
-          marker = new google.maps.Marker({
-            position: newCity,
-            map: map
-          });
+      map.setCenter(marker.getPosition());
+    }
 
-        });
-
-         map.setCenter(marker.getPosition());
-       }
-
-     </script>
+  </script>
 
 
-     <!-- google maps api -->
-     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAsWvsTD9g30mCesT4BroqaRIVc_GzW4wA&libraries=places&callback=googleMapsAPIS"
-     async defer></script>
+  <!-- google maps api -->
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAsWvsTD9g30mCesT4BroqaRIVc_GzW4wA&libraries=places&callback=googleMapsAPIS"
+    async defer></script>
 
 
 
 
-   </body>
-   </html>
+</body>
+
+</html>

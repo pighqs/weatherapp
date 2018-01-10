@@ -46,3 +46,19 @@ body {
 .form-inline {
     text-align: center;
 }
+
+.title-infos {
+    text-align: center;
+    margin-top: 2rem;
+    color:rgb(136, 136, 136);
+}
+
+.title-infos h1 {
+    color: #ec971f;
+    padding:1rem;
+    font-weight: 600
+}
+
+.title-infos p {
+    font-weight:300;
+}
